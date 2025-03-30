@@ -1,0 +1,382 @@
+:root {
+  /* Цвета */
+  --glass-bg: rgba(255, 255, 255, 0.9);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+  --text-primary: #2c3e50;
+  
+  /* Размеры */
+  --panel-radius: 12px;
+  --button-radius: 20px;
+  
+  /* Эффекты */
+  --blur-effect: blur(10px);
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+  /* Анимации */
+  --transition-fast: 0.2s ease;
+  --transition-slow: 0.3s ease;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(45deg, #10001a, #000);
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  z-index: -1;
+}
+
+.app-container {
+  display: flex; /* Делаем контейнер флексом */
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 20px; /* Расстояние между колонками */
+}
+
+.glass-background {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  z-index: -1;
+}
+
+/* Левая колонка (холст) */
+.canvas-column {
+  flex: 1; /* Занимает доступное пространство */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Общие стили для всех панелей с эффектом стекла */
+.controls,
+.canvas-settings,
+.properties-panel {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  color: #2c3e50;
+}
+
+/* Специфичные стили для панели управления (controls) */
+.controls {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  z-index: 1000;
+  transition: transform var(--transition-slow);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.controls.hidden {
+  transform: translateY(calc(100% - 40px));
+}
+
+/* Кнопка переключения панели управления */
+#togglePanelBtn {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px 20px 0 0;
+  padding: 4px 25px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #2c3e50;
+  z-index: 1001;
+  transition: transform var(--transition-fast);
+}
+
+.controls.hidden #togglePanelBtn {
+  transform: translateX(-50%) rotate(180deg);
+}
+
+/* Стили для панели свойств объекта */
+.properties-panel {
+  position: fixed;
+  right: 20px;
+  top: 220px; /* Под настройками холста */
+  width: 300px;
+  border-radius: 8px;
+  padding: 20px;
+  z-index: 1000;
+  display: none; /* По умолчанию скрыта */
+}
+
+.properties-panel.visible {
+  display: block;
+}
+
+/* Заголовки панелей */
+.canvas-settings h3,
+.properties-panel h3 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+/* Кнопки переключения панелей */
+.canvas-settings .toggle-panel-btn,
+.properties-panel .toggle-panel-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #2c3e50;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* Контент панелей */
+.panel-content {
+  margin-top: 15px;
+}
+
+/* Группы свойств */
+.property-group {
+  margin-bottom: 15px;
+}
+
+.property-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.property-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #2c3e50;
+}
+
+.property-group input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Кнопки */
+button {
+  padding: 10px 15px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  color: #2c3e50;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+  .settings-column,
+  .properties-panel {
+    width: calc(100% - 40px);
+    right: 20px;
+    left: 20px;
+  }
+  
+  .properties-panel {
+    top: auto;
+    bottom: 80px;
+  }
+  
+  .controls {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+input, select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+button, input[type="file"]::file-selector-button {
+  padding: 10px 10px;
+  margin: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+  color: #2c3e50;
+  font-size: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover, input[type="file"]:hover, input[type="file"]::file-selector-button:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Общие стили для обеих панелей */
+.settings-panel,
+.properties-panel {
+  position: fixed;
+  left: 20px;
+  width: 300px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  overflow: hidden;
+}
+
+/* Позиционирование панелей */
+.settings-panel {
+  top: 20px;
+}
+
+.properties-panel {
+  top: 220px; /* Подстраиваем под высоту первой панели */
+}
+
+/* Заголовки панелей */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  background: rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.panel-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+/* Кнопки скрытия */
+.toggle-panel-btn {
+  background: none;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  padding: 5px;
+}
+
+/* Контент панелей */
+.panel-content {
+  padding: 15px;
+}
+
+/* Состояние скрытых панелей */
+.panel-hidden .panel-content {
+  display: none;
+}
+
+.panel-hidden .toggle-panel-btn {
+  transform: rotate(180deg);
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+  .settings-panel,
+  .properties-panel {
+    width: calc(100% - 40px);
+    left: 20px;
+    right: 20px;
+  }
+  
+  .properties-panel {
+    top: auto;
+    bottom: 80px; /* Чтобы не перекрывать панель управления */
+  }
+}
+
+.properties-panel {
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 20px;
+  display: none;
+  color: #2c3e50;
+}
+
+.properties-panel.visible {
+  display: block;
+}
+
+.property-group input {
+  transition: border-color 0.2s;
+}
+
+.property-group input:focus {
+  border-color: #4a76a8;
+  outline: none;
+}
+
+.controls {
+  transition: transform 0.3s ease;
+}
+
+.controls.hidden {
+  transform: translateY(100%);
+} 
+
+[data-theme="dark"] {
+  --glass-bg: rgba(30, 30, 40, 0.9);
+  --text-primary: #f0f0f0;
+}
+
+#zoomSlider {
+  width: 200px;
+  margin: 0 10px;
+}
+
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
