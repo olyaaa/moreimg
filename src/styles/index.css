@@ -1,0 +1,35 @@
+body {
+  margin: 0;
+  overflow: hidden; /* Предотвращаем скролл при перетаскивании */
+}
+
+.block {
+  transition: transform 0.1s ease; /* Плавное перемещение */
+}
+
+/* Блок с координатами */
+.block-coords {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  font-size: 12px;
+  padding: 4px;
+  background: #f0f0f0;
+}
+
+/* Список слоёв */
+.layers-view {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.layer-item {
+  padding: 8px;
+  margin: 4px 0;
+  background: white;
+  cursor: pointer;
+}
+
+.layer-item:hover {
+  background: #f5f5f5;
+}
