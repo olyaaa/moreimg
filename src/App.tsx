@@ -1,9 +1,11 @@
 import { Editor } from './components/Editor/Editor'; // Новый путь
 
-function App() {
+const App = () => {  // Изменяем на обычную функцию
   return (
     <div className="app">
-      <Editor /> {/* Используем Editor вместо Canvas+Toolbar */}
+      <Editor />
     </div>
   );
-}
+};
+
+export default App;
