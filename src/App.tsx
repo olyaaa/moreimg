@@ -1,11 +1,13 @@
-import { Editor } from './components/Editor/Editor'; // Новый путь
+import { ThemeProvider } from './contexts/ThemeContext';
+import { Editor } from './components/Editor/Editor'; // или import Editor from './components/Editor/Editor';
 
-const App = () => {  // Изменяем на обычную функцию
+function App() {
+  console.log('App component renders'); // Добавьте это
   return (
-    <div className="app">
+    <ThemeProvider>
       <Editor />
-    </div>
+    </ThemeProvider>
   );
-};
+}
 
 export default App;

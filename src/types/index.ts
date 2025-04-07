@@ -6,7 +6,18 @@ export interface Block {
   zIndex: number;
   content?: string;
   url?: string;
-  children?: string[]; // Для групп
+  fontSize?: number;
+  color?: string;
+  width?: number;
+  height?: number;
+  shapeType?: 'rectangle' | 'circle' | 'triangle';
+  templateKey?: string;
+  isConstant?: boolean;
+  children?: string[];
+}
+
+export interface DataRow {
+  [key: string]: any;
 }
 
 export interface CanvasSettings {
@@ -18,7 +29,10 @@ export interface CanvasSettings {
 export interface EditorState {
   canvas: CanvasSettings;
   blocks: Block[];
+  mainCanvasBlocks: Block[];
+  previewCanvasBlocks: Block[][];
   selectedIds: string[];
+  hasHeaders: boolean;
 }
 
 export interface Layer {
@@ -28,4 +42,9 @@ export interface Layer {
   visible: boolean;
   locked: boolean;
   opacity: number;
+}
+
+export interface ToolbarProps {
+  onAddBlock: (type: Block['type']) => void;
+  onGroup?: () => void;
 }

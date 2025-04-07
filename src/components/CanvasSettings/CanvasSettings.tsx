@@ -2,6 +2,25 @@
 import React, { useState } from 'react';
 import { CanvasSettings } from '../../types';
 
+interface CanvasSettingsPanelProps {
+  settings: CanvasSettings;
+  onUpdate: (settings: CanvasSettings) => void;
+}
+
+/*export const Canvas = () => {
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const { data } = useDataImporter(); // Предположим, что данные загружаются здесь
+
+  return (
+    <div className="canvas-container">
+      <div className="canvas" ref={canvasRef}>
+        // Ваши блоки рендерятся здесь
+      </div>
+      <Exporter data={data} canvasRef={canvasRef} />
+    </div>
+  );
+};*/
+
 export const CanvasSettingsPanel = ({
   settings,
   onUpdate
