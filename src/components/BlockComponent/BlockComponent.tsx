@@ -8,19 +8,40 @@ interface BlockComponentProps {
   onClick?: () => void;
   onPositionChange?: (id: string, x: number, y: number) => void;
   isPreview?: boolean;
+  rowData?: Record<string, string>;
 }
+
+// Вспомогательная функция для замены переменных
+const replaceVariables = (text: string = '', vars: Record<string, string> = {}) => {
+  return text.replace(/\{\{(\w+)\}\}/g, (_, key) => vars[key] || `${key}`);
+};
+
+const getBackground = (block: Block) => {
+  if (block.fillType === 'gradient' && block.gradient) {
+    if (block.gradient.type === 'linear') {
+      return `linear-gradient(${block.gradient.direction || 0}deg, ${block.gradient.colors.join(', ')})`;
+    }
+    return `radial-gradient(${block.gradient.colors.join(', ')})`;
+  }
+  return block.color || 'transparent';
+};
 
 export const BlockComponent: React.FC<BlockComponentProps> = ({ 
   block, 
   isSelected = false, 
   onClick = () => {}, 
   onPositionChange = () => {},
-  isPreview = false
+  isPreview = false,
+  rowData = {}
 }) => {
   const [position, setPosition] = useState({ x: block.x, y: block.y });
   const [isDragging, setIsDragging] = useState(false);
   const dragStartPos = useRef({ x: 0, y: 0 });
   const ref = useRef<HTMLDivElement>(null);
+
+  const isImageUrl = (url: string) => {
+    return /^https?:\/\/.+(\.(jpg|jpeg|png|webp|gif|svg))(\?.+)?$/i.test(url?.trim() || '');
+  };
 
   // Обновляем позицию при изменении пропсов
   useEffect(() => {
@@ -72,7 +93,7 @@ export const BlockComponent: React.FC<BlockComponentProps> = ({
   // Рендер содержимого блока
   const renderContent = () => {
     switch (block.type) {
-      case 'text':
+      case 'text': {
         const text = block.isConstant 
           ? block.content 
           : replaceVariables(block.content || '', DEFAULT_VARIABLES);
@@ -86,16 +107,22 @@ export const BlockComponent: React.FC<BlockComponentProps> = ({
             {text}
           </div>
         );
+      }
+      case 'image': {
+        let src = block.url || '';
+        if (block.isConstant) {
+          src = block.url || '';
+        } else {
+          // Извлекаем ключ из {{key}}
+          const keyMatch = block.url?.match(/\{\{(\w+)\}\}/);
+          const key = keyMatch?.[1] || '';
+          src = rowData[key] || block.url || '';
+        }
 
-      case 'image':
-        const urlKey = block.url?.replace(/\{\{|\}\}/g, '') || '';
-        let src = block.isConstant 
-          ? block.url 
-          : DEFAULT_VARIABLES[urlKey as keyof typeof DEFAULT_VARIABLES] || block.url;
-        
-        if (!src || !/^https?:\/\//i.test(src)) {
+        if (!isImageUrl(src)) {
           src = 'https://via.placeholder.com/200?text=No+Image';
-        }  
+        }
+
         return (
           <img 
             src={src} 
@@ -107,7 +134,7 @@ export const BlockComponent: React.FC<BlockComponentProps> = ({
             }} 
           />
         );
-
+      }
       case 'shape':
         return (
           <div style={{
@@ -118,7 +145,6 @@ export const BlockComponent: React.FC<BlockComponentProps> = ({
             borderRadius: block.shapeType === 'circle' ? '50%' : '0'
           }} />
         );
-
       case 'group':
         return (
           <div style={{
@@ -129,7 +155,6 @@ export const BlockComponent: React.FC<BlockComponentProps> = ({
             Group ({block.children?.length || 0} items)
           </div>
         );
-
       default:
         return <div>Unknown block type: {block.type}</div>;
     }
@@ -165,9 +190,4 @@ export const BlockComponent: React.FC<BlockComponentProps> = ({
       {renderContent()}
     </div>
   );
-};
-
-// Вспомогательная функция для замены переменных
-const replaceVariables = (text: string = '', vars: Record<string, string> = {}) => {
-  return text.replace(/\{\{(\w+)\}\}/g, (_, key) => vars[key] || `{{${key}}}`);
 };

@@ -14,6 +14,13 @@ export interface Block {
   templateKey?: string;
   isConstant?: boolean;
   children?: string[];
+  opacity?: number;
+  fillType?: 'solid' | 'gradient';
+  gradient?: {
+    type: 'linear' | 'radial';
+    colors: string[];
+    direction?: number; 
+  };
 }
 
 export interface DataRow {
@@ -24,6 +31,7 @@ export interface CanvasSettings {
   width: number;
   height: number;
   backgroundColor: string;
+  opacity: number;
 }
 
 export interface EditorState {
@@ -47,4 +55,16 @@ export interface Layer {
 export interface ToolbarProps {
   onAddBlock: (type: Block['type']) => void;
   onGroup?: () => void;
+}
+
+export interface DataImportResult {
+  templateData: DataRow;
+  previewData: DataRow[];
+  hasHeaders: boolean;
+}
+
+export interface Gradient {
+  type: 'linear' | 'radial';
+  colors: string[];
+  direction?: number;
 }
