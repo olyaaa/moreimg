@@ -265,6 +265,88 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({ blocks, onUpdate
               />
             </>
           )}
+          {block.type === 'line' && (
+            <>
+
+              <label htmlFor="color">Цвет:</label>
+                <input
+                  type="color"
+                  id="color"
+                  name="color"
+                  value={block.color || '#000000'}
+                  onChange={handleChange}
+              />
+              
+              <label htmlFor="lineWidth">Толщина линии:</label>
+              <input
+                type="number"
+                id="lineWidth"
+                name="lineWidth"
+                value={block.lineWidth || 2}
+                onChange={handleChange}
+                min="1"
+                max="20"
+              />
+
+              <label htmlFor="length">Длина линии:</label>
+              <input
+                type="number"
+                id="length"
+                name="length"
+                value={block.length || 100}
+                onChange={handleChange}
+                min="10"
+              />
+
+              <label htmlFor="lineType">Тип линии:</label>
+              <select
+                id="lineType"
+                name="lineType"
+                value={block.lineType || 'solid'}
+                onChange={handleChange}
+              >
+                <option value="solid">Сплошная</option>
+                <option value="dashed">Тире</option>
+                <option value="dotted">Точки</option>
+              </select>
+
+            <label htmlFor="lineEnds">Наконечник:</label>
+            <select
+              id="lineEnds"
+              value={block.lineEnds || 'none'}
+              onChange={(e) => onUpdate({ lineEnds: e.target.value as 'none' | 'start' | 'end' | 'both' })}
+            >
+              <option value="none">Нет</option>
+              <option value="start">С одной стороны (начало)</option>
+              <option value="end">С одной стороны (конец)</option>
+              <option value="both">С двух сторон</option>
+            </select>
+
+            <label htmlFor="lineEndType">Тип наконечника:</label>
+            <select
+              id="lineEndType"
+              value={block.lineEndType || 'arrow'}
+              onChange={(e) => onUpdate({ lineEndType: e.target.value as 'circle' | 'square' | 'arrow' })}
+              disabled={block.lineEnds === 'none'}
+            >
+              <option value="arrow">Стрелка</option>
+              <option value="circle">Круг</option>
+              <option value="square">Квадрат</option>
+            </select>
+            </>
+          )}
+
+          {/* Общие свойства для всех блоков */}
+          <label htmlFor="rotation">Угол поворота:</label>
+          <input
+            type="number"
+            id="rotation"
+            name="rotation"
+            value={block.rotation || 0}
+            onChange={handleChange}
+            min="0"
+            max="360"
+          />
         </form>
       )}
     </div>

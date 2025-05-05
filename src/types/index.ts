@@ -1,6 +1,6 @@
 export interface Block {
   id: string;
-  type: 'text' | 'image' | 'shape' | 'group';
+  type: 'text' | 'image' | 'shape' | 'group' | 'line';
   x: number;
   y: number;
   zIndex: number;

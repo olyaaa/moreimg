@@ -1,6 +1,6 @@
 export interface Block {
   id: string;
-  type: 'text' | 'image' | 'shape' | 'group';
+  type: 'text' | 'image' | 'shape' | 'group' | 'line';
   x: number;
   y: number;
   zIndex: number;
@@ -15,12 +15,21 @@ export interface Block {
   isConstant?: boolean;
   children?: string[];
   opacity?: number;
+  layerId?: string;
   fillType?: 'solid' | 'gradient';
   gradient?: {
     type: 'linear' | 'radial';
     colors: string[];
     direction?: number; 
   };
+  rotation?: number;
+  lineWidth?: number;
+  lineType?: 'solid' | 'dashed' | 'dotted';
+  hasArrow?: boolean;
+  hasCircle?: boolean;
+  length?: number;
+  lineEnds?: 'none' | 'start' | 'end' | 'both';
+  lineEndType?: 'circle' | 'square' | 'arrow';
 }
 
 export interface DataRow {
@@ -53,12 +62,14 @@ export interface EditorState {
   previewCanvasBlocks: Block[][];
   selectedIds: string[];
   hasHeaders: boolean;
+  layers: Layer[];
+  currentLayerId: string | null;
 }
 
 export interface Layer {
   id: string;
   name: string;
-  blocks: Block[];
+  blocks: string[];
   visible: boolean;
   locked: boolean;
   opacity: number;

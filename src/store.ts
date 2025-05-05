@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { CanvasSettings, EditorState, Block, Gradient } from './types';
+import { CanvasSettings, EditorState, Block, Gradient, Layer } from './types';
 
 interface CanvasStore extends EditorState {
   addBlocks: (blocks: Block[]) => void;
@@ -11,9 +11,11 @@ interface CanvasStore extends EditorState {
   exportData: DataRow[];
   updateBlockGradient: (id: string, gradient: Gradient) => void;
   updateCanvasOpacity: (opacity: number) => void;
+  layers: Layer[];
+  currentLayerId: string | null;
 }
 
-export const useCanvasStore = create<CanvasStore>((set) => ({
+const initialState: EditorState = {
   canvas: {
     width: 800,
     height: 600,
@@ -31,7 +33,46 @@ export const useCanvasStore = create<CanvasStore>((set) => ({
   previewCanvasBlocks: [],
   selectedIds: [],
   hasHeaders: false,
-  exportData: [], // Initialize with an empty array
+  layers: [{
+    id: 'default-layer',
+    name: 'Default Layer',
+    visible: true,
+    locked: false,
+    opacity: 1,
+    blocks: []
+  }],
+  currentLayerId: 'default-layer'
+};
+
+export const useCanvasStore = create<CanvasStore>((set) => ({
+  canvas: {
+    width: 800,
+    height: 600,
+    backgroundColor: '#ffffff',
+    opacity: 1,
+    fillType: 'solid',
+    gradient: {
+      type: 'linear',
+      colors: ['#ffffff', '#000000'],
+      direction: 90,
+    },
+  },
+  layers: [{
+    id: 'default-layer',
+    name: 'Default Layer',
+    visible: true,
+    locked: false,
+    opacity: 1,
+    blocks: []
+  }],
+  currentLayerId: 'default-layer',
+  blocks: [],
+  mainCanvasBlocks: [],
+  previewCanvasBlocks: [],
+  selectedIds: [],
+  hasHeaders: false,
+  exportData: [],
+   // Initialize with an empty array
 
 
   updateBlockGradient: (id, gradient) => set(state => ({

@@ -18,7 +18,7 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({
   <div className="previews-section">
     <h3>Превью данных</h3>
     <div className="previews-nav">
-      <button className="previews-arrow left" onClick={() => scrollPreviews('left')}>
+      <button className="previews-arrow left" onClick={(e) => scrollPreviews('left')}>
         &lt;
       </button>
       
@@ -36,7 +36,7 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({
         </div>
       </div>
 
-      <button className="previews-arrow right" onClick={() => scrollPreviews('right')}>
+      <button className="previews-arrow right" onClick={(e) => scrollPreviews('right')}>
         &gt;
       </button>
     </div>
@@ -61,6 +61,7 @@ const PreviewCanvas: React.FC<{blocks: Block[], canvas: CanvasSettings, PREVIEW_
           key={block.id} 
           block={block}
           isPreview={true}
+          onClick={() => {}}
         />
       ))}
     </div>

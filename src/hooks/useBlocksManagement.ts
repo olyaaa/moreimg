@@ -71,7 +71,8 @@ export const useBlocksManagement = () => {
       x: 100,
       y: 100 + (blocks.length * 60),
       zIndex: blocks.length + 1,
-      isConstant: false
+      isConstant: false,
+      rotation: 0 // Добавляем вращение по умолчанию
     };
 
     let newBlock: Block;
@@ -100,6 +101,17 @@ export const useBlocksManagement = () => {
           width: 100,
           height: 100,
           color: '#cccccc'
+        } as Block;
+        break;
+      case 'line':
+        newBlock = {
+          ...baseBlock,
+          lineWidth: 2,
+          lineType: 'solid',
+          color: '#000000',
+          length: 100,
+          lineEnds: 'none',
+          lineEndType: 'arrow'
         } as Block;
         break;
       default:
